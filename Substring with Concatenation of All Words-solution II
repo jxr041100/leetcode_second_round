@@ -1,0 +1,57 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int>result;
+        int n = s.size();
+        int m = words.size();
+        if(m==0) return result;
+        int k = words[0].size();
+        unordered_map<string,int> mytable;
+        unordered_map<string,int> currtable;
+        int left,right,count;
+        
+        for(int j = 0;j<m;j++) 
+            mytable[words[j]]++;
+        
+        for(int i = 0;i<k;i++)//trying to different poistions
+        {
+            left = i;
+            count = 0;
+            for(int right = left; right<=n;right+=k)
+            {
+                string sub = s.substr(right,k);
+                if(mytable.find(sub) != mytable.end())
+                {
+                    currtable[sub]++; 
+                    count++;
+                    if (currtable[sub]>mytable[sub])
+                    {
+                        //move the front window to right.
+                        while(currtable[sub]>mytable[sub]){
+                            string sub2 = s.substr(left,k);
+                            currtable[sub2]--;
+                            count--;
+                            left = left+k;
+                        }
+                    }
+                    //found 
+                    if(count == m)
+                    {
+                        result.push_back(left);
+                        string tmp_left = s.substr(left,k);//shift left word
+                        currtable[tmp_left]--;
+                        count--;
+                        left = left+k;
+                    }
+                }
+                else
+                {
+                    currtable.clear();
+                    left = right+k; //update start index position
+                    count = 0;
+                }
+            }
+        }
+        return result;
+    }
+};
