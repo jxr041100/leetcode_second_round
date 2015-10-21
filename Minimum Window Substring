@@ -1,0 +1,65 @@
+/**********************************************
+ Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+For example,
+S = "ADOBECODEBANC"
+T = "ABC"
+
+Minimum window is "BANC".
+
+Note:
+If there is no such window in S that covers all characters in T, return the empty string "".
+
+If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S. 
+
+***********************************/
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int n = s.size();
+        int m = t.size();
+        
+        //two pointers, and two hashtable
+        unordered_map<char,int> mytable;
+        unordered_map<char,int> currtable;
+        int count = 0;
+        string result = "";
+        int minLen = INT_MAX;
+        for(int i = 0;i<m;i++) 
+            mytable[t[i]]++;
+        
+        int left    = 0;
+        int right   = 0;
+        for(int right = 0;right<n;right++)
+        {
+            char c = s[right];
+            //move the right pointer
+            if(mytable.find(c) != mytable.end())//found
+            {
+                 if(currtable[c]<mytable[c]) // make all number from t being counted 
+                        count++;
+                  currtable[c]++;
+            }
+            if(count == m) //found
+            {
+                char b = s[left];
+                // pay more attention to the following logic, how to move left pointer.
+                while (mytable.find(b)==mytable.end() || currtable[b]> mytable[b])
+                {
+                    //found the character
+                     currtable[b]--;
+                    //go to next character
+                    left++;
+                    b = s[left];
+                }
+                if((right-left+1)<minLen)
+                {
+                    minLen = right-left+1;
+                    result = s.substr(left,right-left+1);
+                }
+            }
+        }
+        return result;
+    }
+};
