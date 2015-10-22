@@ -13,9 +13,9 @@ public:
         dfs(0,board);
     }
     
+    //notes: we must return true/flase to indicate the we succeed or not.
     bool dfs(int index,vector<vector<char>>& board)
     {
-   
        if(index == 81) return true;
        int  j = index/9;
        int  i = index%9;
@@ -29,12 +29,13 @@ public:
                 if(isValid(k,i,j,board) == true)
                 {
                     board[j][i] = k + '0';
-                    if(dfs(index+1,board)) return true;
+                    if(dfs(index+1,board)) 
+                        return true;
                     board[j][i] = '.';
                 }
             }
         }
-        return false;
+        return false;  //failed, we return false.
     }
     
     bool isValid(int k, int col, int row,vector<vector<char>>& board)
