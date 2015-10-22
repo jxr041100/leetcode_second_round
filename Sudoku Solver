@@ -1,0 +1,64 @@
+Q:
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+Empty cells are indicated by the character '.'.
+
+You may assume that there will be only one unique solution.
+
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        if(board.size()<9 || board[0].size()<9) return;
+        dfs(0,board);
+    }
+    
+    bool dfs(int index,vector<vector<char>>& board)
+    {
+   
+       if(index == 81) return true;
+       int  j = index/9;
+       int  i = index%9;
+       
+        if(board[j][i] != '.')
+             return dfs(index+1,board);
+        else
+        {
+            for(int k = 1;k<=9;k++)
+            {
+                if(isValid(k,i,j,board) == true)
+                {
+                    board[j][i] = k + '0';
+                    if(dfs(index+1,board)) return true;
+                    board[j][i] = '.';
+                }
+            }
+        }
+        return false;
+    }
+    
+    bool isValid(int k, int col, int row,vector<vector<char>>& board)
+    {
+        //check column
+        for (int j = 0;j<9;j++ )
+          if(board[j][col]-'0' == k && j!=row) return false;
+        
+        //check row
+         for (int i = 0;i<9;i++ )
+          if(board[row][i]-'0' == k && i!=col) return false;
+         
+         //check the block. 
+         int block_y = row/3;
+         int block_x = col/3;
+         
+         for(int j = block_y*3;j<block_y*3+3;j++)
+            for(int i = block_x*3;i<block_x*3+3;i++)
+              if(board[j][i]-'0' == k && (j!=row ||i !=col)) 
+                return false;
+                
+         return true;
+    }
+    
+};
+
+
