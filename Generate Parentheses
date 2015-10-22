@@ -1,0 +1,74 @@
+/****************************
+ Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+For example, given n = 3, a solution set is:
+
+"((()))", "(()())", "(())()", "()(())", "()()()" 
+*************************************/
+
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string>result;
+        string ans = "";
+        dfs(n,0,0,ans,result);
+        return result;
+    }
+    void dfs(int n,int left,int right,string ans,vector<string>&result)
+    {
+        if(left == n && right == n)
+        {
+            result.push_back(ans);
+            return;
+        }
+        
+        if(left < n) 
+        { 
+            ans = ans +"(";  
+            dfs(n,left+1,right,ans,result);
+        }
+        if(right < left)
+        { 
+            ans = ans +")";  
+            dfs(n,left,right+1,ans,result);
+        }
+    }
+};
+
+
+//passed solution
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string>result;
+        string ans = "";
+        dfs(n,0,0,ans,result);
+        return result;
+    }
+    void dfs(int n,int left,int right,string&ans,vector<string>&result)
+    {
+        if(left == n && right == n)
+        {
+            result.push_back(ans);
+            return;
+        }
+        /**********************************************************
+        Notes 10/21/2015 
+        if ans is passed as reference, we need to explicitly pop back the element.
+        if asn is passed as value, we do not need to pop back. 
+        **********************************************************/
+        
+        if(left < n) 
+        { 
+            ans = ans +"(";  
+            dfs(n,left+1,right,ans,result);
+            ans.pop_back(); 
+        }
+        if(right < left)
+        { 
+            ans = ans +")";  
+            dfs(n,left,right+1,ans,result);
+            ans.pop_back();
+        }
+    }
+};
