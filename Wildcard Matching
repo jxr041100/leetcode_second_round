@@ -49,4 +49,39 @@ public:
 };
 
 
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int index = -1;
+        int mark = 0;
+        int j = 0;
+        int i = 0;
+        while(i<s.size())
+        {
+            if(s[i] == p[j] || p[j]=='?')//skip to next element
+            {
+                i++;
+                j++;
+            }
+            else if (p[j] =='*')
+            {
+               index = j;
+               mark = i;
+               j++;
+            }
+            // this is very important. 
+            else if(index!=-1)
+            {
+                j = index+1;
+                i = ++mark;
+            }
+            else 
+               return false;
+        }
+        while(j<p.size() && p[j]=='*') j++;
+        return j==p.size()?true:false;
+    }
+};
+
+
 
