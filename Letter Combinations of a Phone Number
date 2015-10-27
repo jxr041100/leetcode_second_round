@@ -1,0 +1,50 @@
+Q:
+Given a digit string, return all possible letter combinations that the number could represent. 
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+
+Solution:
+
+class Solution {
+public:
+ 
+    string digit_lookuptable[10];
+ 
+
+    vector<string> letterCombinations(string digits) {
+        digit_lookuptable[0] = " ";        
+        digit_lookuptable[1] = "OO";  
+        digit_lookuptable[2] = "abc";
+        digit_lookuptable[3] = "def";        
+        digit_lookuptable[4] = "ghi";  
+        digit_lookuptable[5] = "jkl";
+        digit_lookuptable[6] = "mno";        
+        digit_lookuptable[7] = "pqrs";  
+        digit_lookuptable[8] = "tuv";
+        digit_lookuptable[9] = "wxyz";
+        vector<string>result;
+        string ans;
+        if(digits.size() == 0) return result;
+        dfs(digits,0,ans,result);
+        return result;
+    }
+    
+    void dfs(string digits,int start,string &ans,vector<string>&result)
+    {
+       
+        if(start == digits.size())
+        {
+            result.push_back(ans);
+            return;
+        }
+        int curr_num = digits[start]-'0';
+        for(int i = 0;i<digit_lookuptable[curr_num].size();i++)
+         {
+              ans = ans+digit_lookuptable[curr_num][i];
+              dfs(digits,start+1,ans,result);
+              ans.pop_back();
+         }
+    }
+};
