@@ -1,0 +1,59 @@
+Q:
+ Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+    The left subtree of a node contains only nodes with keys less than the node's key.
+    The right subtree of a node contains only nodes with keys greater than the node's key.
+    Both the left and right subtrees must also be binary search trees.
+
+confused what "{1,#,2,3}" means? > read more on how binary tree is serialized on OJ.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+      /* the following solution does not work
+        if(root == NULL) return true;
+        if ( (root->left) && (root->left->val>=root->val)  || (root->right)&&(root->right->val<=root->val))
+            return false;
+        if(isValidBST(root->left) && isValidBST(root->right)) 
+            return true;
+        else
+            return false;
+      *********************************************/
+      bPrevUsed= false;
+      return inorder_helper(root);
+    }
+    
+    bool inorder_helper(TreeNode *root)
+    {
+        if( root== NULL) return true;
+        if(inorder_helper(root->left))
+        {
+            if(bPrevUsed ==false) {pre = root->val;bPrevUsed = true;}
+            else
+            {
+                if(root->val<=pre)
+                   return false;
+                else
+                  pre = root->val;
+                
+            }
+            return inorder_helper(root->right);
+        }
+        else
+          return false;
+    }
+private:
+  int pre;
+  bool bPrevUsed;
+};
