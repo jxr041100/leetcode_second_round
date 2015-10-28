@@ -1,0 +1,45 @@
+Q:Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors. 
+
+
+/**
+ * Definition for undirected graph.
+ * struct UndirectedGraphNode {
+ *     int label;
+ *     vector<UndirectedGraphNode *> neighbors;
+ *     UndirectedGraphNode(int x) : label(x) {};
+ * };
+ */
+class Solution {
+public:
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(node == NULL) return NULL;
+        unordered_map<UndirectedGraphNode*,UndirectedGraphNode*>mymap;
+        queue<UndirectedGraphNode *>myqueue;
+        
+        //Note: initially we only need to push the first node into queue; (2):remember to push the original nodes into queue.
+        UndirectedGraphNode *clone_node = new UndirectedGraphNode(node->label);
+        mymap[node] = clone_node;
+        myqueue.push(node);
+        
+        while(!myqueue.empty())
+        {
+            UndirectedGraphNode *front_node = myqueue.front();
+            myqueue.pop();
+            UndirectedGraphNode *curr_node = mymap[front_node];
+            for(int j = 0;j<front_node->neighbors.size();j++)
+            {
+                UndirectedGraphNode *neighb = front_node->neighbors[j];
+                if(mymap[neighb])
+                    curr_node->neighbors.push_back(mymap[neighb]);
+                else
+                {
+                     UndirectedGraphNode *child = new UndirectedGraphNode(neighb->label);
+                      curr_node->neighbors.push_back(child);
+                      mymap[neighb] = child;
+                      myqueue.push(neighb);
+                }
+            }
+        }
+        return clone_node;
+    }
+};
