@@ -1,0 +1,64 @@
+Q:A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null. 
+
+Return a deep copy of the list. 
+
+
+
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct RandomListNode {
+ *     int label;
+ *     RandomListNode *next, *random;
+ *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+       if(head == NULL) return NULL;
+       unordered_map<RandomListNode *,RandomListNode *>mymap;
+       queue<RandomListNode *>myqueue;
+       
+       RandomListNode *clone_head = new RandomListNode(head->label);
+       mymap[head] = clone_head;
+       myqueue.push(head);
+       
+       while(!myqueue.empty())
+       {
+           RandomListNode *curr_node = myqueue.front();
+           myqueue.pop();
+           RandomListNode *copy_node = mymap[curr_node];
+           
+           //deep copy the next node
+           if(curr_node->next!= NULL)
+           {
+               if(mymap[curr_node->next])
+                copy_node->next = mymap[curr_node->next];
+               else
+               {
+                   RandomListNode *next_node = new RandomListNode(curr_node->next->label);
+                   copy_node->next = next_node;
+                   mymap[curr_node->next] = next_node;
+                   myqueue.push(curr_node->next);
+               }
+           }
+           
+           //deep copy the random node.
+          if(curr_node->random!= NULL)
+           {
+               if(mymap[curr_node->random])
+                copy_node->random = mymap[curr_node->random];
+               else
+               {
+                   RandomListNode *random_node = new RandomListNode(curr_node->random->label);
+                   copy_node->random = random_node;
+                   mymap[curr_node->random] = random_node;
+                   myqueue.push(curr_node->random);
+               }
+           }
+       }
+       
+       return clone_head;
+    }
+};
