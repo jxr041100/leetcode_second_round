@@ -1,0 +1,51 @@
+Q:
+ Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
+Above is a histogram where width of each bar is 1, given height = [2,1,5,6,2,3].
+The largest rectangle is shown in the shaded area, which has area = 10 unit.
+For example,
+Given height = [2,1,5,6,2,3],
+return 10. 
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& height) {
+        stack<int> indexStack;
+        int n = height.size();
+        if(n==0) return 0;//pay attention to boundary condition.
+        int max_area = INT_MIN;
+        int area;
+        for(int j = 0;j<n;j++)
+        {
+            if(indexStack.empty() || height[j]>=height[indexStack.top()])
+                  //push current index.
+                indexStack.push(j);
+            else
+            {
+                //pop the value until the current height is larger than top in the stack.
+                while(!indexStack.empty() && height[j]<height[indexStack.top()])
+                {
+                    int top_index = indexStack.top();
+                    indexStack.pop();
+                    //Note:need to check whether stack is empty or not, if empty,
+                    //top index value is the minimum value from 0 to j;
+                    if(indexStack.empty()) area = height[top_index] * j;
+                    else area = height[top_index]*(j-indexStack.top()-1);
+                    //Note::minus one due to pop out the value.
+                    max_area = max(max_area,area);
+                }
+                  //push current index.
+                indexStack.push(j);
+            }
+           
+        }
+        while(!indexStack.empty())
+        {
+            int top_index = indexStack.top();
+            indexStack.pop();
+            if(indexStack.empty()) area = height[top_index] * n;
+            else area = height[top_index]*(n-indexStack.top()-1);
+            max_area = max(max_area,area);
+        }
+        return max_area;
+    }
+};
