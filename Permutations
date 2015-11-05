@@ -26,3 +26,35 @@ public:
         }
     }
 };
+
+solution II:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> tmp;
+        vector<int> visited(nums.size(),0);
+        sort(nums.begin(),nums.end());
+        dfs(nums,0,visited,tmp,result);
+        return result;
+    }
+    void dfs(vector<int>& nums,int m, vector<int> &visited,vector<int> &tmp,vector<vector<int>>&result)
+    {
+        if(m == nums.size())
+        {
+            result.push_back(tmp);
+            return;
+        }
+        for(int i = 0;i<nums.size();i++)
+        {
+            if(visited[i]==0)
+            {
+                visited[i]=1;
+                tmp.push_back(nums[i]);
+                dfs(nums,m+1,visited,tmp,result);//why m or not i. 
+                tmp.pop_back();
+                visited[i]=0;
+            }
+        }
+    }
+};
