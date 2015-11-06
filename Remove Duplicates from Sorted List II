@@ -12,6 +12,7 @@ Given 1->1->1->2->3, return 2->3.
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ // passed one time. but slow speed. 
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
