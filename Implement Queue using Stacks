@@ -1,0 +1,72 @@
+Implement the following operations of a queue using stacks. 
+• push(x) -- Push element x to the back of queue. 
+• pop() -- Removes the element from in front of queue. 
+• peek() -- Get the front element. 
+• empty() -- Return whether the queue is empty. 
+Notes:
+•You must use only standard operations of a stack -- which means only push to top, peek/pop from top, size, and is empty operations are valid.
+•Depending on your language, stack may not be supported natively. You may simulate a stack by using a list or deque (double-ended queue), as long as you use only standard operations of a stack.
+•You may assume that all operations are valid (for example, no pop or peek operations will be called on an empty queue).
+
+
+
+class Queue {
+public:
+    // Push element x to the back of queue.
+    void push(int x) {
+        mystack1.push(x);
+    }
+
+    // Removes the element from in front of queue.
+    void pop(void) {
+        int n  = mystack1.size();
+        if(n==0) return; //empty.
+        while(n>1)
+        { 
+            mystack2.push(mystack1.top());
+            mystack1.pop();
+            n--;
+        }
+        
+        int top = mystack1.top();
+        mystack1.pop();
+        
+        while(!mystack2.empty())
+        {
+            mystack1.push(mystack2.top());
+            mystack2.pop();
+        }
+    }
+
+    // Get the front element.
+    int peek(void) {
+        int n  = mystack1.size();
+        if(n==0) return 0; //empty.
+        while(n>1)
+        { 
+            mystack2.push(mystack1.top());
+            mystack1.pop();
+            n--;
+        }
+        
+        int top = mystack1.top();
+        mystack2.push(top);
+        mystack1.pop();
+        
+        while(!mystack2.empty())
+        {
+            mystack1.push(mystack2.top());
+            mystack2.pop();
+        }
+        return top;
+    }
+
+    // Return whether the queue is empty.
+    bool empty(void) {
+        
+        return mystack1.empty();
+        
+    }
+stack<int> mystack1;
+stack<int> mystack2;
+};
