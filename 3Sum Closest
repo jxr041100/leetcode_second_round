@@ -1,0 +1,82 @@
+Q：
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+    For example, given array S = {-1 2 1 -4}, and target = 1.
+
+    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+
+class Solution {
+public:
+
+     int threeSumClosest(vector<int>& nums, int target)
+     {
+        int n = nums.size();
+        if(n == 0) return 0;
+        if(n==1) return nums[0];
+        int expect,left,right;
+        int closest_sum;
+        int min_diff=INT_MAX;
+         
+         sort(nums.begin(),nums.end());
+         for(int i = 0;i<n;i++)
+         {
+            expect = target -nums[i];
+            left = i+1;
+            right = n-1;
+            while(left<right)
+            {
+                int sum = nums[left] + nums[right];
+                
+                //find the closest sum
+                if(abs(sum-expect)<min_diff)
+                {
+                    min_diff = abs(sum-expect);
+                    closest_sum = nums[i] +nums[left] + nums[right];
+                }
+                
+                //move the pointers.
+                if(sum-expect == 0)
+                    return closest_sum;
+                else if(sum-expect >0)
+                    right--;
+                else if(sum-expect<0)
+                    left++;
+            }
+         }
+         return closest_sum;
+     }
+
+Notes: DFS approach 超过时间了。
+
+  /*  int threeSumClosest(vector<int>& nums, int target) {
+        vector<int> ans;
+        closest_sum = 0;
+        min_diff = INT_MAX;
+        sort(nums.begin(),nums.end());
+        dfs(0,nums,ans,target);
+        return closest_sum;
+    }
+    void dfs(int m,vector<int>& nums, vector<int> &ans,int target)
+    {
+        if(ans.size() ==3)
+        {
+            int sum = accumulate(ans.begin(),ans.end(),0);
+            if(abs(sum-target)<min_diff)
+            {
+                min_diff = abs(sum-target);
+                closest_sum = sum;
+            }
+            return;
+        }
+        for(int i = m;i<nums.size();i++)
+        {
+            ans.push_back(nums[i]);
+            dfs(i+1,nums,ans,target);
+            ans.pop_back();
+        }
+    }
+    
+     int closest_sum;
+     int min_diff;*/
+    
+};
