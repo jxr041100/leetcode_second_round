@@ -1,0 +1,72 @@
+Q:
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+Example 1:
+11110
+11010
+11000
+00000
+
+Answer: 1
+
+Example 2:
+11000
+11000
+00100
+00011
+
+Answer: 3
+
+
+
+class Solution {
+public: 
+    int number_island;
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        if(m ==0) return 0;
+        int n = grid[0].size();
+      
+        vector<vector<bool>> visited(m,vector<bool>(n));
+        number_island = 0;
+        for(int j = 0;j<m;j++)
+            for(int i = 0;i<n;i++)
+            {
+                //printf("m = %d,n = %d,%d\n",m,n,visited[j][i]);
+                if(visited[j][i]==false && grid[j][i]=='1')
+                {
+                  
+                    number_island++;
+                    visited[j][i] = true;
+                    dfs(j,i,m,n,grid,visited);
+                }
+            }
+        return number_island;
+    }
+    
+    void dfs(int start_y,int start_x,int m, int n, vector<vector<char>>& grid,vector<vector<bool>>&visited)
+    {
+        if(start_y+1<m && grid[start_y+1][start_x]=='1' && visited[start_y+1][start_x]==false)
+        {
+            visited[start_y+1][start_x] = true;
+            dfs(start_y+1,start_x,m,n,grid,visited);
+        }
+        
+        if(start_y-1>=0 && grid[start_y-1][start_x]=='1' && visited[start_y-1][start_x]==false)
+        {
+            visited[start_y-1][start_x] = true;
+            dfs(start_y-1,start_x,m,n,grid,visited);
+        }
+        
+        if(start_x+1<n && grid[start_y][start_x+1]=='1' && visited[start_y][start_x+1]==false)
+        {
+            visited[start_y][start_x+1] = true;
+            dfs(start_y,start_x+1,m,n,grid,visited);
+        }
+        
+        if(start_x-1>=0 && grid[start_y][start_x-1]=='1'&& visited[start_y][start_x-1]==false)
+        {
+            visited[start_y][start_x-1] = true;
+            dfs(start_y,start_x-1,m,n,grid,visited);
+        }
+    }
+};
