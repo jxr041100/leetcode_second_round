@@ -1,0 +1,84 @@
+Q:
+Given inorder and postorder traversal of a tree, construct the binary tree.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+  TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        
+       int in_start = 0;
+       int in_end = inorder.size()-1;
+       int post_start = 0;
+       int post_end  = postorder.size()-1;
+       return buildTree_help(inorder,in_start,in_end,postorder,post_start,post_end);
+  }
+  
+   TreeNode* buildTree_help(vector<int>& inorder,int in_start,int in_end,
+                            vector<int>& postorder,int post_start,int post_end) {
+                                
+        int i;
+        if(in_start > in_end || post_start>post_end) return NULL;
+       // if(inorder.size() == 0 || postorder.size()==0) return NULL;
+        int root_val = postorder[post_end];
+        TreeNode *root = new TreeNode(root_val);
+        for(i = in_start;i<=in_end;i++)
+        {
+            if(inorder[i] == root_val ) 
+                break;
+        }
+        
+        //Notes 11/10/2015: pay attention to the following index. 
+        root->left   = buildTree_help(inorder,in_start,i-1, 
+                                      postorder,post_start,post_start+i-1-in_start);
+        root->right  = buildTree_help(inorder,i+1,in_end,
+                                      postorder,post_start+i-in_start,post_end-1);
+        
+        return root;
+        
+    }
+
+/*  Note 11/10/2015: the following steps are memory limited problem.
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        
+        int n = inorder.size();
+        if(n == 0) return NULL;
+        int i;
+        int root_val = postorder[n-1];
+        TreeNode *root = new TreeNode(root_val);
+        for(i = 0;i<n;i++)
+        {
+            if(inorder[i] == root_val ) 
+                break;
+        }
+        
+        vector<int> left_in;
+        vector<int> left_post;
+        vector<int> right_in;
+        vector<int> right_post;
+        for(int j = 0;j<i;j++)
+        {
+          left_in.push_back(inorder[j]);
+          left_post.push_back(postorder[j]);
+        }
+        for(int j = i+1;j<n;j++)
+          right_in.push_back(inorder[j]);
+        for(int j = i;j<n-1;j++)
+          right_post.push_back(postorder[j]);
+        
+        root->left   = buildTree(left_in,left_post);
+        root->right  = buildTree(right_in,right_post);
+        
+        return root;
+        
+    }*/
+    
+    
+};
