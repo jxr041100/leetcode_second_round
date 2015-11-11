@@ -1,0 +1,48 @@
+Q:
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+       int in_start = 0;
+       int in_end = inorder.size()-1;
+       int pre_start = 0;
+       int pre_end  = preorder.size()-1;
+       return buildTree_help(inorder,in_start,in_end,
+                            preorder,pre_start,pre_end);
+  }
+  
+   TreeNode* buildTree_help(vector<int>& inorder,int in_start,int in_end,
+                            vector<int>& preorder,int pre_start,int pre_end) {
+                                
+        int i;
+        if(in_start > in_end || pre_start>pre_end) return NULL;
+        int root_val = preorder[pre_start];
+        TreeNode *root = new TreeNode(root_val);
+        for(i = in_start;i<=in_end;i++)
+        {
+            if(inorder[i] == root_val ) 
+                break;
+        }
+        
+        //Notes 11/10/2015: pay attention to the following index. 
+        root->left   = buildTree_help(inorder,in_start,i-1, 
+                                        preorder,pre_start+1,pre_start+i-in_start);
+        root->right  = buildTree_help(inorder,i+1,in_end,
+                                        preorder,pre_start+i+1-in_start,pre_end);
+        
+        return root;
+        
+    }
+};
