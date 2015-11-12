@@ -1,0 +1,50 @@
+Q:
+ Given two binary strings, return their sum (also a binary string).
+
+For example,
+a = "11"
+b = "1"
+Return "100". 
+
+
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int m = a.size();
+        int n = b.size();
+        int i = m-1,j=n-1;
+        int k,extra_bit = 0;
+        string c;
+        while(i>=0 || j>=0)
+        {
+            int ai = i>=0?a[i]-'0':0;
+            int bj = j>=0?b[j]-'0':0;
+            //note: simple approach
+            int val = (ai+bj+extra_bit)%2;
+            extra_bit =(ai+bj+extra_bit)/2;
+            
+            //string insert approach.
+            c.insert(c.begin(),val+'0');
+            i--;j--;
+           /* if(i>=0&&j>=0)  {k= a[i]-'0' + b[j]-'0'+extra_bit;i--;j--;}
+            else if(i>=0 && j<0) {k= a[i]-'0'+extra_bit;i--;}
+            else if(j>=0 && i<0) {k= b[j]-'0'+extra_bit;j--;}
+            
+            if(k>=2) 
+                {
+                    extra_bit = 1; 
+                    char tmp = k-2+'0';
+                    c=c.insert(0,1,tmp);
+                }
+            else 
+                {
+                    extra_bit = 0;
+                    char tmp = k+'0';
+                    c = c.insert(0,1,tmp);
+                }*/
+        }
+        if(extra_bit) c = c.insert(0,1,'1');
+        return c;
+    }
+};
