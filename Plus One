@@ -1,0 +1,23 @@
+Q:
+Given a non-negative number represented as an array of digits, plus one to the number.
+The digits are stored such that the most significant digit is at the head of the list.
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        vector<int> result;
+        int n = digits.size();
+        if(n==0){result.push_back(1);return result;}
+        int extra_bit = 1;
+        for(int i = n-1;i>=0;i--)
+        {
+            int val = (digits[i]+extra_bit)%10;
+            extra_bit = (digits[i]+extra_bit)/10;
+            result.push_back(val);
+        }
+        if(extra_bit==1)result.push_back(extra_bit);
+        reverse(result.begin(),result.end());
+        return result;
+    }
+};
