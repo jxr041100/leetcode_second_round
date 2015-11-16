@@ -1,0 +1,68 @@
+Q:
+ Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+For example, given
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"]. 
+
+
+class Solution {
+public:
+    vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+          string ans;
+        vector<string> result;
+       
+        int n = s.size();
+        vector<bool>dp(n+1);
+        dp[0] = true;
+        
+        //dynamical programming.
+        for(int i = 0;i<n;i++)
+            if(dp[i]==true)  //note: put dp[i] outside of j loop.
+            for(int j = i;j<n;j++)//notes: j<n;not j<n-i;
+            {
+                string sub = s.substr(i,j-i+1);//pay attention to index.
+                if(wordDict.find(sub)!=wordDict.end())
+                 dp[j+1] = true;
+            
+            }
+       
+        if(dp[n]==false) return result;
+        
+        //backtracking 
+        dfs(s,0,wordDict,dp,ans,result);
+        return result;
+    }
+    void dfs(string s,int m,unordered_set<string>& wordDict,vector<bool>dp,string &ans,vector<string>& result)
+    { 
+         
+        if(m==s.size())
+        {
+            result.push_back(ans);
+            return;
+        }
+        
+        for(int i = m;i<=s.size();i++)
+        {
+            //index should be i+1. 
+            if(dp[i+1]==true && wordDict.find(s.substr(m,i-m+1))!=wordDict.end())
+            {
+                string str = s.substr(m,i-m+1);
+                ans = ans + str;
+                if((i+1)!=s.size()) ans = ans+" ";
+                dfs(s,i+1,wordDict,dp,ans,result);
+                
+                //Notes: how to pop back the previous added, using erase, pop_back does not work. 
+                /* if((i+1)!=s.size()) ans.pop_back();
+                ans.pop_back();*/
+                
+               if((i+1) != s.size())ans.erase(ans.size()-str.size()-1,str.size()+1);
+               else ans.erase(ans.size()-str.size(),str.size());
+            }
+        }
+    }
+};
