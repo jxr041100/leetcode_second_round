@@ -1,0 +1,53 @@
+Q:
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+For example,
+Given the following matrix:
+
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+
+You should return [1,2,3,6,9,8,7,4,5]. 
+
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        int m = matrix.size();
+        if(m==0) return result;
+        int n = matrix[0].size();
+        int row_start = 0,row_end = m;
+        int col_start = 0,col_end = n;
+       
+       
+        while(row_start<row_end && col_start<col_end)
+        {
+            for(int c = col_start;c<col_end;c++)
+                result.push_back(matrix[row_start][c]);
+            row_start++;
+            
+            for(int r = row_start;r<row_end;r++)
+                result.push_back(matrix[r][col_end-1]);
+            col_end--;
+            
+            if(row_start<row_end)
+            {
+                for(int c = col_end-1;c>=col_start;c--)
+                    result.push_back(matrix[row_end-1][c]);
+                row_end--;
+            }
+            
+            if(col_start<col_end)
+            {
+                for(int r = row_end-1;r>=row_start;r--)
+                    result.push_back(matrix[r][col_start]);
+                col_start++;
+            }
+        }
+        return result;
+    }
+};
