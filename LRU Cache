@@ -1,0 +1,63 @@
+Q:
+ Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+set(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least 
+recently used item before inserting a new item. 
+
+
+class LRUCache{
+public:
+    struct CacheNode
+    {
+    public:
+        int key;
+        int value;
+        CacheNode(int k,int v){key = k;value = v;}
+    };
+
+    LRUCache(int capacity) {
+        m_capicity = capacity;
+    }
+    
+    int get(int key) {
+        if(cache_map.find(key) == cache_map.end())
+            return -1;
+        movetohead(key);
+        return cache_list.front().value;
+    }
+    
+    void set(int key, int value) {
+         if(cache_map.find(key) == cache_map.end())
+         {
+             CacheNode cacheNode(key,value);
+             if(cache_list.size() == m_capicity)
+             {
+                 //remove the last element
+                 CacheNode tmp = cache_list.back();
+                 cache_map.erase(tmp.key);
+                 cache_list.pop_back();
+                 //cache_list.erase(cache_list.end()); remember this does nto work. 
+             }
+            cache_list.push_front(cacheNode);
+            cache_map[key] = cache_list.begin();
+            return;
+         }
+         cache_map[key]->value = value;///?????????????????
+         movetohead(key);
+    }
+    
+private:   
+    void movetohead(int key)
+    {
+        list<CacheNode>::iterator it = cache_map[key];
+        cache_list.erase(it);
+        cache_map.erase(key);
+        
+        cache_list.push_front(*it);
+        cache_map[key] = cache_list.begin();
+    }
+    int m_capicity;
+    unordered_map<int,list<CacheNode>::iterator>cache_map;
+    list<CacheNode> cache_list;
+};
