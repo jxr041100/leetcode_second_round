@@ -1,0 +1,70 @@
+Q:
+Given a binary tree, return the postorder traversal of its nodes' values.
+For example:
+Given binary tree {1,#,2,3},
+
+   1
+    \
+     2
+    /
+   3
+
+return [3,2,1].
+Note: Recursive solution is trivial, could you do it iteratively?
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+       /*
+        1.1 Create an empty stack
+        2.1 Do following while root is not NULL
+            a) Push root's right child and then root to stack.
+            b) Set root as root's left child.
+        2.2 Pop an item from stack and set it as root.
+            a) If the popped item has a right child and the right child 
+               is at top of stack, then remove the right child from stack,
+               push the root back and set root as root's right child.
+            b) Else print root's data and set root as NULL.
+        2.3 Repeat steps 2.1 and 2.2 while stack is not empty.
+       */
+       stack<TreeNode*>mystack;
+       vector<int> result;
+       if(root == NULL) return result;
+       do
+       {
+           while(root)
+           {
+               if(root->right) mystack.push(root->right);
+               mystack.push(root);
+               root = root->left;
+           }
+           
+           root = mystack.top();
+           mystack.pop();
+           
+           //Notes: mystack.size()>0 should be added here. 
+           if(root->right && mystack.size()>0 && root->right == mystack.top())
+           {
+               mystack.pop();
+               mystack.push(root);
+               root = root->right;
+           }
+           else
+           {
+               result.push_back(root->val);
+               root = NULL;
+           }
+       }while(!mystack.empty());
+       return result;
+    }
+};
