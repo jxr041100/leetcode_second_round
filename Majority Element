@@ -1,0 +1,55 @@
+Q:
+Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+You may assume that the array is non-empty and the majority element always exist in the array.
+
+class Solution {
+public:
+/*****************************************************************
+找主要元素，用major记录主要字母，n记录major相对于其他字母多出现的次数
+if         n == 0 ， 设当前数字为主要数字
+else if   当前数字等于主要数字， n++
+else     当前数字不等于主要数字， n--
+因为主要数字出现多于一半，所以最后major表示的一定是主要数字。
+**********************************************************
+        int major;
+        int n = 0;
+
+        for(int i = 0; i < num.size(); i++)
+        {
+            if(n == 0)
+            {
+                major = num[i]; n++;
+            }
+            else if(major == num[i])
+            {
+                n++;
+            }
+            else
+            {
+                n--;
+            }
+        }
+        return major;
+/
+
+    int majorityElement(vector<int>& nums) {
+       int n = nums.size();
+       int major_element = nums[0];
+       int num_element = 1;
+       for(int i = 1;i<n;i++)
+       {
+           if(nums[i]==major_element)
+            num_element++;
+            else
+            {
+                num_element--;
+                if(num_element==0)
+                {
+                    major_element=nums[i];
+                    num_element++;
+                }
+            }
+       }
+       return major_element;
+    }
+};
