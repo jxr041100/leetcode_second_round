@@ -1,0 +1,59 @@
+Q:
+
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int m = board.size();
+        if(m==0) return false;
+        int n = board[0].size();
+        if(m!=9 || n!=9) return false;
+        for(int j = 0;j<m;j++)
+            for(int i = 0;i<n;i++)
+            {
+                if(board[j][i]=='.') continue;
+                if(!isValidRow(j,i,board) || 
+                   !isValidCol(j,i,board) || 
+                   !isValidBlock(j,i,board))
+                    return false;
+            }
+        return true;
+    }
+    
+    bool isValidRow(int j,int i,vector<vector<char>>& board)
+    {
+        for(int k = 0;k<9;k++)
+        {
+            if(k==i || board[j][k]=='.') continue;
+            if(board[j][k]==board[j][i])
+                return false;
+        }
+        return true;
+    }
+    
+    
+    bool isValidCol(int j,int i,vector<vector<char>>& board)
+    {
+        for(int k = 0;k<9;k++)
+        {
+            if(k==j || board[k][i]=='.') continue;
+            if(board[k][i]==board[j][i])
+                return false;
+        }
+        return true;
+    }
+    
+    bool isValidBlock(int j,int i,vector<vector<char>>& board)
+    {
+        int block_y = j/3;
+        int block_x = i/3;
+        for(int k = block_y*3;k<block_y*3+3;k++)
+            for(int l = block_x*3;l<block_x*3+3;l++)
+            {
+            if((k == j && l ==i)||board[k][l]=='.') continue;
+            if(board[k][l]==board[j][i])
+                return false;
+            }
+        return true;
+    }
+};
