@@ -4,7 +4,18 @@ Given an array of n positive integers and a positive integer s, find the minimal
 For example, given the array [2,3,1,2,4,3] and s = 7,
  the subarray [4,3] has the minimal length under the problem constraint
 
-
+/***********************
+ int l, r, cum, res = nums.size()+1;
+    l = r = cum = 0;
+    while ((unsigned int)r < nums.size()) {
+        cum += nums[r++];
+        while (cum >= s) {
+            res = min(res, r-l);
+            cum -= nums[l++];
+        }
+    }
+    return res<=nums.size()?res:0;
+***************************************/
 
 
 class Solution {
