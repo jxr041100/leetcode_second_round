@@ -1,0 +1,44 @@
+Q:
+class Solution {
+public:
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+        vector<int> k(n);
+        int m = primes.size();
+        vector<int> index(m);//pointer to each prime numbers.
+        k[0] = 1;
+        for(int i  = 1; i < n ; i ++)
+        {
+            k[i] = INT_MAX;
+            for(int m = 0;m<primes.size();m++)
+                 k[i] = min(k[i],k[index[m]]*primes[m]);
+           for(int m = 0;m<primes.size();m++)
+           {
+               if(k[i]==k[index[m]]*primes[m]) 
+                  index[m]++;
+           }
+        }
+        return k[n-1];
+    }
+};
+
+class Solution {
+public:
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+        vector<int> k(n);
+        int m = primes.size();
+        vector<int> index(m);//pointer to each prime numbers.
+        k[0] = 1;
+        for(int i  = 1; i < n ; i ++)
+        {
+            k[i] = INT_MAX;
+            for(int m = 0;m<primes.size();m++)
+                 k[i] = min(k[i],k[index[m]]*primes[m]);
+           for(int m = 0;m<primes.size();m++)
+           {
+               if(k[i]==k[index[m]]*primes[m]) 
+                  index[m]++;
+           }
+        }
+        return k[n-1];
+    }
+};
