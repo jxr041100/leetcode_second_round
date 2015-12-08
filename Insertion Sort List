@@ -10,6 +10,38 @@ Sort a linked list using insertion sort.
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head)
+    {
+        if(head == NULL || head->next == NULL) return head;
+        ListNode dummy(INT_MIN);
+        ListNode *p = &dummy;
+        ListNode *curr = head;
+        while(curr)
+        {
+            p = &dummy;
+            while(p->next && p->next->val <=curr->val)
+                p = p->next;
+            
+            ListNode *n = p->next;
+            p->next = curr;
+            curr = curr->next;
+            p->next->next = n;
+        }
+        return dummy.next;
+    }
+};
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
  
   Note: Passed one time.
 class Solution {
