@@ -16,6 +16,28 @@ The array may contain duplicates.
 
 
 Subscribe to see which companies asked this question
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int low = 0;
+        int n = nums.size();
+        int high = n-1;
+      
+      //notes: nums[low]>=nums[high], and when they are equal, low++.
+      while(low<high && nums[low]>=nums[high])
+      {
+          int mid = low + (high-low)/2;
+          //notes the index 
+          if(nums[mid]>nums[high]) low = mid+1;  //right sorted
+          else if(nums[mid]<nums[high]) high = mid; //left sorted
+          else low = low+1;
+      }
+      return nums[low];
+    }
+};
+
+
+
 
 
 class Solution {
