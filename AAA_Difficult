@@ -1,3 +1,11 @@
 1. recursive approach for reverse linked list;
-2. Fraction to Recurring Decimal
+2. Fraction to Recurring Decimal; (using map to recode (rem,pos)
+3. one eidt distance problem; (edit distance using dp, but this problem is O(n) solution and O(1)space).
+4. Expression Add Operators;
+5. reverse the nodes in k-group.
+6. Merge the K sorted list;
+7. intersection of two link list;
+8. Gas station/jump game/ candy problem (all greedy problems).
+9. Unique binary search trees I/II;
+
 
