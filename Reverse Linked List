@@ -29,3 +29,30 @@ public:
         return pre;
     }
 };
+
+
+//recursive solution.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        return reverseUtil(head,NULL);
+    }
+    
+    ListNode *reverseUtil(ListNode*curr,ListNode*pre)
+    {
+        //Note 12/13/2015: return pre not NULL.
+        if(curr==NULL) return pre;
+        
+        ListNode *next = curr->next;
+        curr->next = pre;
+        return reverseUtil(next,curr);
+    }
+};
