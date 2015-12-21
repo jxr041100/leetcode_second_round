@@ -1,0 +1,79 @@
+Q:
+Additive number is a string whose digits can form additive sequence.
+
+A valid additive sequence should contain at least three numbers. Except for the first two numbers, each subsequent number in the sequence must be the sum of the preceding two.
+
+For example:
+"112358" is an additive number because the digits can form an additive sequence: 1, 1, 2, 3, 5, 8. 
+1 + 1 = 2, 1 + 2 = 3, 2 + 3 = 5, 3 + 5 = 8
+"199100199" is also an additive number, the additive sequence is: 1, 99, 100, 199. 1 + 99 = 100, 99 + 100 = 199
+
+
+Note: Numbers in the additive sequence cannot have leading zeros, so sequence 1, 2, 03 or 1, 02, 3 is invalid. 
+
+Given a string containing only digits '0'-'9', write a function to determine if it's an additive number.
+
+Follow up:
+ How would you handle overflow for very large input integers? 
+
+
+class Solution {
+public:
+    bool isAdditiveNumber(string num) {
+     int n = int(num.size());
+        if (n < 2) {
+            return false;
+        }
+        int i = 0;
+        // for all possible sets of starting digits. 
+        for (int j = i; j < n-1; j++) {
+            int k = j + 1;
+            for (int l = k; l < n; l++) {
+                if (additive(num, i, j, k, l)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+private:
+    string addstrs(string str, int i, int j, int k, int l) {
+        string s1 = str.substr(i,(j-i)+1);
+        string s2 = str.substr(k,(l-k)+1);
+        unsigned long long n1 = stoull(s1);
+        unsigned long long n2 = stoull(s2);
+        return to_string(n1 + n2);
+    };
+
+    // [i,j] is first number
+    // [k,l] is second number
+    bool additive(string str, int i, int j, int k, int l) {
+        // leading zeros not allowed, only single 0 digits
+        if (str[i] == '0' && i != j || str[k] == '0' && l != k) {
+            return false;
+        }
+        while (true) {
+            if (j >= str.size() || l >= str.size()) {
+                return false;
+            } 
+            // get the two numbers in the sequence
+            string s = addstrs(str, i, j, k, l);
+            if (s.size() > str.substr(l).size()) {
+                // result is larger than remaining digits in str
+                return false;
+            } else if (str.substr(l+1).find(s) == 0) {
+                // str contains the correct value in the sequence
+                i = k;
+                j = l;
+                k = l + 1;
+                l = k + (s.size() - 1);
+                if (l == str.size()-1) {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    };
+};
