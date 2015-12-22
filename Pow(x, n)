@@ -1,0 +1,34 @@
+Implement pow(x, n). 
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if(n<0)
+        {
+            double result = myPowHelp(x,abs(n));
+            return  1.0/result;
+        }
+        else
+        {
+            return myPowHelp(x,n);
+        }
+    }
+    
+    double myPowHelp(double x, int n)
+    {
+        if(n==0) return 1.0;
+        if(n==1) return x;
+        if(n==2) return x*x;
+    
+        if(n%2==0)
+        {
+            double result = myPow(x,n/2);
+            return result*result;
+        }
+        else
+        {
+            double result = myPow(x,(n-1)/2);
+            return result*result*x;
+        }
+    }
+};
