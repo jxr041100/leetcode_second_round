@@ -1,0 +1,29 @@
+Q:
+Implement int sqrt(int x).
+
+Compute and return the square root of x.
+
+
+
+Subscribe to see which companies asked this question
+
+
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        //Note: why should long type instead of int.??????
+        long left = 0;
+        long right = x;
+        while(left<=right)
+        {
+            long mid = (left+right)/2;
+            long long sq = mid*mid;
+            if(sq==x) return mid;
+            else if(sq>x ) right = mid-1;
+            else left = mid+1;
+        }
+        
+        return right;
+    }
+};
