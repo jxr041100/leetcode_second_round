@@ -1,0 +1,95 @@
+Q:
+ Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left justified and no extra space is inserted between words.
+
+For example,
+words: ["This", "is", "an", "example", "of", "text", "justification."]
+L: 16.
+
+Return the formatted lines as:
+
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+
+Note: Each word is guaranteed not to exceed L in length. 
+
+
+
+
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        int n = words.size();
+        vector<string> res;
+        int j = 0; 
+        int m = 0;
+        if(n==0)
+        {
+            string tmp="";
+            res.push_back(tmp);
+            return res;
+        }
+        else if(n==1 && words[0].size()==0)
+        {
+            string tmp;
+            while(m++<maxWidth) tmp = tmp+" ";
+            res.push_back(tmp);
+            return res;
+        }
+        //cout << n << " and " << words[0].size() << endl;
+        while(j<n)
+        {
+            int len_words_line = 0;
+            int num_words = 0;
+            int word_start_index = j;
+            ///////////////////////////////////////////////
+            while(j<n && (len_words_line+words[j].size()+num_words)<=maxWidth)
+            {
+                len_words_line += words[j].size();
+                num_words++;
+                j++;//
+            }
+            ////////////////////////////////////////////////
+            // handle the words into string
+            string tmp;
+            int spaces = maxWidth-len_words_line;
+            if(j==n){//last line
+                for(int k = 0;k<num_words;k++)
+                {
+                    tmp = tmp+words[word_start_index+k];
+                    if(k!=num_words-1)tmp=tmp+" ";
+                }
+                 //filling the empty spaces
+                for(int j = tmp.size();j<maxWidth;j++)tmp=tmp+" ";
+            }
+            else
+            {
+                int actual_num_spaces = num_words-1;
+                int word_space = 0;
+                int extra_space = 0;
+                if(actual_num_spaces!=0)
+                   extra_space =  spaces%actual_num_spaces;
+                if(actual_num_spaces!=0)
+                   word_space = spaces/actual_num_spaces;
+                for(int k = 0;k<num_words;k++)
+                {
+                    tmp = tmp+words[word_start_index+k];
+                    if(k<extra_space){m = 0; while(m++<word_space+1)tmp = tmp+" ";}
+                    else if(k!=num_words-1){m = 0;while(m++<word_space)tmp=tmp+" ";}
+                }
+                //filling the empty spaces
+                for(int j = tmp.size();j<maxWidth;j++)tmp=tmp+" ";
+            }
+            res.push_back(tmp);
+        }
+        return res;
+    }
+};
