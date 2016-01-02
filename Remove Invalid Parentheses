@@ -1,0 +1,144 @@
+ Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Examples:
+
+"()())()" -> ["()()()", "(())()"]
+"(a)())()" -> ["(a)()()", "(a())()"]
+")(" -> [""]
+
+Credits:
+Special thanks to @hpplayer for adding this problem and creating all test cases.
+
+Subscribe to see which companies asked this question
+q
+
+
+class Solution {
+public:
+    //  BFS solution
+    vector<string> removeInvalidParentheses(string s) {
+        queue<string> myq;
+        vector<string> result;
+        unordered_map<string,bool> mymap;
+        bool found = false;
+        myq.push(s);
+        while(!myq.empty())
+        {
+            string tmp = myq.front();
+            myq.pop();
+            if(isValidParenthes(tmp))
+            {
+                found = true;
+                result.push_back(tmp);
+            }
+            if(found == false) //firstly found always the longest. 
+            {
+                for(int i = 0;i<tmp.size();i++) 
+                {
+                    if(tmp[i]!='(' && tmp[i]!=')') continue;
+                    string t = tmp.substr(0,i)+tmp.substr(i+1);
+                    if(mymap.find(t)==mymap.end())//early pruning
+                    {
+                        mymap[t] = true;
+                        myq.push(t);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+     bool isValidParenthes(string s){
+        int left = 0, right = 0;
+        for(auto c:s){
+            if(c=='(') left++;
+            if(c==')') right++;
+            if(right>left) return false;
+        }
+        return left==right;
+    }
+};
+
+
+/************************************************************
+    //  DFS SOLUTION
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+       unordered_set<string> res; //Notes: used to avoid the duplicates
+       string ans;
+       int max_len = 0;
+       dfs(s,0,0,0,ans,res,max_len);
+       cout << max_len << endl;
+       vector<string> res1;
+       for(auto it=res.begin();it!=res.end();it++)
+       {
+            cout << *it << endl;
+            if((*it).size()>=max_len) 
+                res1.push_back(*it);
+       }
+       if(res1.size()==0) res1.push_back("");
+       return res1;
+    }
+    
+    void dfs(string s,int idx,int left,int right,string ans,unordered_set<string>&res,int &max_len)
+    {
+        //Notes: could not return. consider the following condition "x("
+        if(left==right && ans.size()>=max_len){
+            res.insert(ans);
+            max_len = ans.size();
+        }
+        for(int i = idx;i<s.size();i++)
+        {
+           // if(i>idx && s[i]==s[i-1]) continue;//why this line????????
+            if(s[i] == '(')
+            {
+                dfs(s,i+1,left+1,right,ans+s[i],res, max_len);
+            }
+            else if(s[i] == ')')
+            {
+                if(left>right)
+                   dfs(s,i+1,left,right+1,ans+s[i],res,max_len);
+            }
+            else if(s[i]!=')' && s[i]!='(') //skip the character.
+                  dfs(s,i+1,left,right,ans+s[i],res,max_len);
+        }
+    }
+    
+};
+******************************************************/
+/* solution from online ************************************************
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        vector<string> ret;
+        int maxLen = 0;
+        dfs(s, "", ret, 0, s.size(), 0, 0, maxLen);
+ 
+        vector<string> ret1;
+        for(auto v:ret){
+            if(v.size()>=maxLen) ret1.push_back(v);
+        }
+        return ret1;
+    }
+ 
+    void dfs(string s, string cur, vector<string> &ret, int pos, int n, int left, int right, int &maxLen){
+        if(left==right && cur.size()>=maxLen){
+            ret.push_back(cur);
+            maxLen = cur.size();
+        }
+ 
+        for(int i=pos; i<n; ++i){
+            if(i>pos && s[i]==s[i-1]) continue;//avoid the duplicates
+            if(s[i]=='('){
+                dfs(s, cur+s[i], ret, i+1, n, left+1, right, maxLen);
+            }else if(s[i]==')' && right<left){
+                dfs(s, cur+s[i], ret, i+1, n, left, right+1, maxLen);
+            }else if(s[i]!='(' && s[i]!=')'){
+                dfs(s, cur+s[i], ret, i+1, n, left, right, maxLen);
+            }
+        }
+    }
+};*/
