@@ -1,0 +1,76 @@
+mplement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
+
+You may assume that the given expression is always valid.
+
+Some examples:
+
+"3+2*2" = 7
+" 3/2 " = 1
+" 3+5 / 2 " = 5
+
+
+
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int>  nums;
+        stack<char> sign;
+        int num  = 0;
+        int n = s.size();
+        for(int i = 0;i<n;i++)
+        {
+            if(s[i]==' ')continue;
+            if(s[i]>='0'&&s[i]<='9')
+                num = num*10+s[i]-'0';
+            else
+            {
+                if(!sign.empty() && (sign.top()=='*'||sign.top()=='/'))
+                {
+                    int pre_num = nums.top();
+                    nums.pop();
+                    if(sign.top()=='*') nums.push(pre_num*num);
+                    if(sign.top()=='/') nums.push(pre_num/num);
+                    sign.pop();
+                    sign.push(s[i]);
+                }
+                else
+                {
+                    nums.push(num);
+                    sign.push(s[i]);
+                }
+                num = 0; //reset 
+            }
+        }
+        
+        //last element.
+        if(!sign.empty() && (sign.top()=='*'||sign.top()=='/'))
+        {
+            int pre_num = nums.top();
+            nums.pop();
+            if(sign.top()=='*') num = pre_num*num;
+            if(sign.top()=='/') num = pre_num/num;
+            sign.pop();
+        }
+        
+        nums.push(num);
+        
+        int sum = 0;
+        while(!nums.empty())
+        {
+           int  pre_num   = nums.top();
+           nums.pop();
+           if(!sign.empty())
+           {
+                char pre_sign  = sign.top();sign.pop();
+                if(pre_sign=='+') sum = sum + pre_num;
+                if(pre_sign=='-') sum = sum - pre_num;
+           }
+           else
+                sum = sum + pre_num;
+        }
+        return sum;
+        
+    }
+};
