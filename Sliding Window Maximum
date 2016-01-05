@@ -1,0 +1,58 @@
+Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+
+For example,
+ Given nums = [1,3,-1,-3,5,3,6,7], and k = 3.
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+
+Therefore, return the max sliding window as [3,3,5,5,6,7].
+
+Note: 
+ You may assume k is always valid, ie: 1 ≤ k ≤ input array's size for non-empty array.
+
+Follow up:
+ Could you solve it in linear time?
+
+
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque <int> myq;
+        deque <int> maxq;
+        //Notes: we should not use the priority_queue<int> maxheap;because we have some duplicates
+        vector<int> result;
+        int i = 0;
+        if(nums.size()==0) return result;
+        if(k<=0) return result;
+        
+        //initialize
+        while(i<k){
+            myq.push_back(nums[i]);
+            while(!maxq.empty() && maxq.back()<nums[i]) maxq.pop_back();
+            maxq.push_back(nums[i]);
+            i++;
+        }
+        
+        result.push_back(maxq.front());
+        
+        while(i<nums.size())
+        {
+            int front = myq.front();myq.pop_front();
+            if(front == maxq.front()) maxq.pop_front();
+            myq.push_back(nums[i]);
+            while(!maxq.empty() && maxq.back()<nums[i]) maxq.pop_back();
+            maxq.push_back(nums[i]);
+            result.push_back(maxq.front());
+            i++;
+        }
+        return result;
+    }
+};
