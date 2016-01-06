@@ -1,0 +1,32 @@
+Problem Description:
+
+Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+
+For example,
+Assume that words = ["practice", "makes", "perfect", "coding", "makes"].
+
+Given word1 = "coding", word2 = "practice", return 3.
+Given word1 = "makes", word2 = "coding", return 1.
+
+Note:
+You may assume that word1 does not equal to word2, and word1 and word2 are both in the list.
+
+--------------------------------------------------------------------------------
+
+The naive idea is very easy. But could you solve it in one-pass? Well, the one-pass code (taken from here) is rewritten in C++ as follows.
+
+
+复制代码
+ 1 class Solution {
+ 2 public:
+ 3     int shortestDistance(vector<string>& words, string word1, string word2) {
+ 4         int n = words.size(), idx1 = -1, idx2 = -1, dist = INT_MAX;
+ 5         for (int i = 0; i < n; i++) {
+ 6             if (words[i] == word1) idx1 = i;
+ 7             else if (words[i] == word2) idx2 = i;
+ 8             if (idx1 != -1 && idx2 != -1)
+ 9                 dist = min(dist, abs(idx1 - idx2));
+10         }
+11         return dist;
+12     }
+13 };
