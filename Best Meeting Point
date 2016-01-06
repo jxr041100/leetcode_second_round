@@ -1,0 +1,46 @@
+Problem Description:
+
+A group of two or more people wants to meet and minimize the total travel distance. You are given a 2D grid of values 0 or 1, where each 1 marks the home of someone in the group. The distance is calculated using Manhattan Distance, where distance(p1, p2) = |p2.x - p1.x| + |p2.y - p1.y|.
+
+For example, given three people living at (0,0), (0,4), and (2,2):
+1 - 0 - 0 - 0 - 1
+|   |   |   |   |
+0 - 0 - 0 - 0 - 0
+|   |   |   |   |
+0 - 0 - 1 - 0 - 0
+
+The point (0,2) is an ideal meeting point, as the total travel distance of 2+2+2=6 is minimal. So return 6.
+
+Hint:
+1.Try to solve it in one dimension first. How can this solution apply to the two dimension case?
+
+
+--------------------------------------------------------------------------------
+
+Since the distance is computed using the Manhattan Distance, we can decompose this 2-d problem into two 1-d problems and combine (add) their solutions. In fact, the best meeting point is just the point that comprised by the two best meeting points in each dimension.
+
+For the 1d case, the best meeting point is just the median point.
+This post shares a nice Python code. However, translating it into C++ makes it so ugly...
+
+
+复制代码
+ 1 class Solution {
+ 2 public:
+ 3     int minTotalDistance(vector<vector<int>>& grid) {
+ 4         int m = grid.size(), n = grid[0].size();
+ 5         vector<int> ii, jj;
+ 6         for (int i = 0; i < m; i++) {
+ 7             for (int j = 0; j < n; j++) {
+ 8                 if (grid[i][j]) {
+ 9                     ii.push_back(i);
+10                     jj.push_back(j);
+11                 }
+12             }
+13         } 
+14         sort(jj.begin(), jj.end());
+15         int c = ii.size(), s = 0, io = ii[c/2], jo = jj[c/2];
+16         for (int i : ii) s += abs(i - io);
+17         for (int j : jj) s += abs(j - jo);
+18         return s;
+19     }
+20 }; 
