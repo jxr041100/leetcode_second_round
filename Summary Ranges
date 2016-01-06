@@ -1,0 +1,30 @@
+Given a sorted integer array without duplicates, return the summary of its ranges.
+For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"]. 
+
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+      int n = nums.size();
+      vector<string> result;
+      if(n==0) return result;
+      int pre , curr;
+      int i = 0;
+      while(i<n)
+      {
+          pre = nums[i];i++;
+          while(i<n && nums[i]==nums[i-1]+1)i++;
+          curr = nums[i-1];
+          string tmp = convert_str(pre,curr);
+          result.push_back(tmp);
+      }
+      return result;
+    }
+    
+    string convert_str(int pre,int curr)
+    {
+       string tmp;
+       if(curr!=pre) tmp = to_string(pre)+"->"+to_string(curr);
+       else tmp = to_string(pre);
+       return tmp;
+    }
+};
